@@ -367,7 +367,7 @@ const App: React.FC = () => {
         // Random Event Trigger (every 3 turns)
         const newTurnsSinceLastEvent = turnsSinceLastEvent + 1;
         setTurnsSinceLastEvent(newTurnsSinceLastEvent);
-        if (newTurnsSinceLastEvent >= 3) {
+        if (newTurnsSinceLastEvent >= 5) {
           setTurnsSinceLastEvent(0);
           setShouldTriggerEvent(true);
         }
@@ -639,7 +639,7 @@ const App: React.FC = () => {
         <div className="relative z-10 text-center space-y-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-bold text-white drop-shadow-lg">学期结束</h1>
-            <p className="text-xl text-indigo-200">正在生成你的故事结局...</p>
+            <p className="text-xl text-indigo-200">正在展望你的故事结局...</p>
           </div>
 
           {/* Loading spinner */}
@@ -734,8 +734,8 @@ const App: React.FC = () => {
                             <path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </div>
-                        <p className="text-amber-900 font-medium">正在生成你的生日祝贺画像…</p>
-                        <p className="text-slate-500 text-sm mt-2">AI 正在描绘这特殊的一刻</p>
+                        <p className="text-amber-900 font-medium">正在描绘你的生日祝贺画像…</p>
+                        <p className="text-slate-500 text-sm mt-2">摄影师正在描绘这特殊的一刻</p>
                       </div>
                     ) : birthdayImageUrl ? (
                       <div className="w-full bg-white/90 backdrop-blur-sm rounded-2xl border border-white/60 p-6 flex flex-col items-center shadow-lg">
@@ -1281,7 +1281,7 @@ const App: React.FC = () => {
               <div className="p-12 flex flex-col items-center justify-center gap-6 bg-gradient-to-br from-rose-50 to-pink-50 min-h-[300px]">
                 {/* Loading spinner */}
                 <div className="w-12 h-12 border-4 border-rose-200 border-t-rose-600 rounded-full animate-spin"></div>
-                <p className="text-slate-600 font-medium text-center">正在生成事件...</p>
+                <p className="text-slate-600 font-medium text-center">正在遭遇事件...</p>
                 <p className="text-xs text-slate-400 text-center">如果加载时间过长，将自动关闭</p>
               </div>
             </div>
