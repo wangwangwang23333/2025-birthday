@@ -1184,11 +1184,11 @@ const App: React.FC = () => {
                 const money = gameState.stats.money;
                 const energy = gameState.stats.energy;
                 // Simple gig - low pay, low cost
-                opts.push({ id: 'part_time_easy', label: '送外卖（短时）', earn: 50, energyCost: 10, reqEnergy: 10, desc: '短时任务，收入小但消耗少。' });
+                opts.push({ id: 'part_time_easy', label: '送外卖（短时）', earn: 30, energyCost: 10, reqEnergy: 10, desc: '短时任务，收入小但消耗少。' });
                 // Normal shift
-                opts.push({ id: 'part_time_normal', label: '咖啡店班次', earn: 150, energyCost: 30, reqEnergy: 25, desc: '标准班次，适中收入，需一定体力。' });
+                opts.push({ id: 'part_time_normal', label: '咖啡店班次', earn: 100, energyCost: 30, reqEnergy: 25, desc: '标准班次，适中收入，需一定体力。' });
                 // High-pay but requires energy or skill
-                opts.push({ id: 'part_time_high', label: '家教一节课', earn: 400, energyCost: 40, reqEnergy: 40, desc: '高报酬，需精力充足或专业能力。' });
+                opts.push({ id: 'part_time_high', label: '家教一节课', earn: 200, energyCost: 40, reqEnergy: 40, desc: '高报酬，需精力充足或专业能力。' });
                 return opts.map(opt => (
                   <div key={opt.id} className="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200">
                     <div>
