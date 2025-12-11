@@ -225,7 +225,7 @@ export const generateEnding = async (
     async () => {
       try {
         const prompt = `
-学期结束（第10周）。梁乔迎来了结局。
+学期结束（第14天）。梁乔迎来了结局。
 
 最终属性: ${JSON.stringify(gameState.stats)}
 人际关系: ${JSON.stringify(gameState.relationships)}

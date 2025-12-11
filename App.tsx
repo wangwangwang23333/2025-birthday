@@ -36,7 +36,7 @@ import { GameState, Gender, TimeSlot, LogEntry, CharacterStats, Relationship, Me
 import { generateTurn, generateEnding, requestBirthdayImage, generateRandomEvent } from './services/geminiService';
 
 // --- Constants & Init ---
-const MAX_WEEKS = 10;
+const MAX_WEEKS = 2;
 
 const INITIAL_STATS: CharacterStats = {
   academic: 50,
@@ -215,7 +215,7 @@ const App: React.FC = () => {
       wishes: finalWishes,
       history: [{
         id: 'init',
-        text: `欢迎来到同济大学嘉定校区，${playerName}！你是软件工程专业的新生。济事楼的代码、满天星的美食、还有未知的邂逅都在等你。这学期共有10周，为了那个完美的结局，出发吧！`,
+        text: `欢迎来到同济大学嘉定校区，${playerName}！你是软件工程专业的新生。济事楼的代码、满天星的美食、还有未知的邂逅都在等你。这学期共有14天，为了那个完美的结局，出发吧！`,
         type: 'system',
         turn: 0
       }]
@@ -911,7 +911,7 @@ const App: React.FC = () => {
                     {gameState.timeSlot === TimeSlot.Morning ? '上午' : gameState.timeSlot === TimeSlot.Afternoon ? '下午' : '晚上'}安排
                 </h3>
                 <div className="flex gap-2">
-                    <button onClick={() => canSave ? saveGame() : null} disabled={!canSave || loading} className={`p-2 rounded-full transition-colors ${canSave ? 'text-blue-600 bg-blue-50' : 'text-slate-300 bg-slate-50'}`}><Save size={18} /></button>
+                    <button onClick={() => saveGame() } disabled = {loading} className={`p-2 rounded-full transition-colors ${'text-blue-600 bg-blue-50' }`}><Save size={18} /></button>
                     <button onClick={() => {setShowMessages(true); setActiveMessageContact(null)}} className="relative p-2 rounded-full text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors">
                         <MessageCircle size={18} />
                         {getUnreadCount() > 0 && <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>}
@@ -1080,7 +1080,8 @@ const App: React.FC = () => {
                 { id: 'coffee', label: '咖啡', cost: 8, effects: { energy: 25, mood: -2 }, desc: '体力 +25，心情 -2' },
                 { id: 'book', label: '参考书', cost: 60, effects: { academic: 6 }, desc: '学业 +6' },
                 { id: 'energy_drink', label: '能量饮料', cost: 25, effects: { energy: 50, mood: -5 }, desc: '体力 +50，心情 -5' },
-                { id: 'sleep_potion', label: '昏睡水', cost: 500, effects: { jumpToLastDay: true }, desc: '我等不及啦！直接推进到学期最后一天（不可逆）' },
+                { id: 'back_potion', label: '再给我一次机会吧', cost: 600, effects: { jumpToFirstDay: true }, desc: '回到学期的第一天' },
+                { id: 'sleep_potion', label: '昏睡水', cost: 10, effects: { jumpToLastDay: true }, desc: '我等不及啦！直接推进到学期最后一天（不可逆）' },
               ].map(item => (
                 <div key={item.id} className="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200">
                   <div>
@@ -1116,6 +1117,14 @@ const App: React.FC = () => {
                               week: MAX_WEEKS,
                               day: 7,
                               timeSlot: TimeSlot.Evening,
+                            };
+                          }
+                          if (item.effects.jumpToFirstDay) {
+                            newState = {
+                              ...newState,
+                              week: 1,
+                              day: 1,
+                              timeSlot: TimeSlot.Morning,
                             };
                           }
 
