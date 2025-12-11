@@ -365,10 +365,10 @@ const App: React.FC = () => {
              setTimeout(() => setShowWeeklyReport(true), 800);
         }
 
-        // Random Event Trigger (every 3 turns)
+        // Random Event Trigger (every 5 turns)
         const newTurnsSinceLastEvent = turnsSinceLastEvent + 1;
         setTurnsSinceLastEvent(newTurnsSinceLastEvent);
-        if (newTurnsSinceLastEvent >= 3) {
+        if (newTurnsSinceLastEvent >= 5) {
           setTurnsSinceLastEvent(0);
           setShouldTriggerEvent(true);
         }
@@ -1378,7 +1378,7 @@ const App: React.FC = () => {
                           if (gameState.stats.money < opt.cost) { alert('钱不够了'); return; }
                           const prev = gameState;
                           const newStatsBase = { ...prev.stats };
-                          newStatsBase.money = Math.max(0, newStatsBase.money - opt.cost);
+                          // newStatsBase.money = Math.max(0, newStatsBase.money - opt.cost);
                           newStatsBase.mood = Math.min(100, (newStatsBase.mood || 0) + opt.mood);
                           newStatsBase.energy = Math.min(100, (newStatsBase.energy || 0) + opt.energy);
 
