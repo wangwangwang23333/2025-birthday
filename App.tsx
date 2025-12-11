@@ -364,10 +364,10 @@ const App: React.FC = () => {
              setTimeout(() => setShowWeeklyReport(true), 800);
         }
 
-        // Random Event Trigger (every 3 turns)
+        // Random Event Trigger (every 4 turns)
         const newTurnsSinceLastEvent = turnsSinceLastEvent + 1;
         setTurnsSinceLastEvent(newTurnsSinceLastEvent);
-        if (newTurnsSinceLastEvent >= 5) {
+        if (newTurnsSinceLastEvent >= 4) {
           setTurnsSinceLastEvent(0);
           setShouldTriggerEvent(true);
         }

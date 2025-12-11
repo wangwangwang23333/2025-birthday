@@ -331,7 +331,7 @@ export const generateRandomEvent = async (
     outcome: string;
   }>;
 }> => {
-  const CHOICE_TIMEOUT = 200000;
+  const CHOICE_TIMEOUT = 300000;
   return callWithRetry(async () => {
     try {
       const prompt = `
