@@ -121,6 +121,7 @@ const App: React.FC = () => {
   const [eventLoading, setEventLoading] = useState(false);
   const [turnsSinceLastEvent, setTurnsSinceLastEvent] = useState(0);
   const [shouldTriggerEvent, setShouldTriggerEvent] = useState(false);
+  const [eventError, setEventError] = useState<string | null>(null);
   
   // Game State
   const playerName = '梁乔';
@@ -364,10 +365,10 @@ const App: React.FC = () => {
              setTimeout(() => setShowWeeklyReport(true), 800);
         }
 
-        // Random Event Trigger (every 4 turns)
+        // Random Event Trigger (every 3 turns)
         const newTurnsSinceLastEvent = turnsSinceLastEvent + 1;
         setTurnsSinceLastEvent(newTurnsSinceLastEvent);
-        if (newTurnsSinceLastEvent >= 4) {
+        if (newTurnsSinceLastEvent >= 3) {
           setTurnsSinceLastEvent(0);
           setShouldTriggerEvent(true);
         }
@@ -404,7 +405,7 @@ const App: React.FC = () => {
        setEndingStage(1); // Start with Career
      } catch (e) {
        console.error(e);
-       alert("生成结局失败，请重试");
+       alert("找不到结局啦，你是不是一口气烧了学校的档案室？");
        setEndingLoading(false); // Reset loading on error
      }
   };
@@ -412,21 +413,23 @@ const App: React.FC = () => {
   const triggerRandomEvent = async () => {
     setEventLoading(true);
     setShowEvent(true); // Show loading modal immediately
+    setEventError(null);
     try {
-      // Add timeout: if event generation takes more than 15 seconds, auto-close
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Event generation timeout')), 15000)
+      // Add timeout: if event generation takes more than 20 seconds, consider it a failure
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('事件回忆超时（30s）')), 30000)
       );
       const event = await Promise.race([
         generateRandomEvent(gameState),
-        timeoutPromise
+        timeoutPromise,
       ]);
       setCurrentEvent(event);
       setEventLoading(false);
-    } catch (e) {
-      console.error('Failed to generate random event:', e);
-      // Auto-close on timeout or error
-      setShowEvent(false);
+      setEventError(null);
+    } catch (err: any) {
+      console.error('Failed to generate random event:', err);
+      // Keep modal open, show an error message and allow user to retry or close
+      setEventError(err?.message || '事件回忆失败');
       setCurrentEvent(null);
       setEventLoading(false);
     }
@@ -1089,7 +1092,7 @@ const App: React.FC = () => {
                     <button
                       onClick={() => {
                         if (gameState.stats.money < item.cost) {
-                          alert('余额不足，无法购买此物品。');
+                          alert('穷小子，先赚点钱再来吧！');
                           return;
                         }
 
@@ -1250,7 +1253,7 @@ const App: React.FC = () => {
                             });
                           } catch (err) {
                             console.error('工作动作生成失败', err);
-                            alert('无法生成该次工作的剧情内容，请检查网络或稍后再试');
+                            alert('无法找到该次工作的剧情内容，请检查网络或稍后再试');
                           } finally {
                             setLoading(false);
                           }
@@ -1269,7 +1272,7 @@ const App: React.FC = () => {
       {/* Random Event Modal */}
       {showEvent && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          {eventLoading || !currentEvent ? (
+          {eventLoading ? (
             // Loading state
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">
               <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -1281,8 +1284,26 @@ const App: React.FC = () => {
               <div className="p-12 flex flex-col items-center justify-center gap-6 bg-gradient-to-br from-rose-50 to-pink-50 min-h-[300px]">
                 {/* Loading spinner */}
                 <div className="w-12 h-12 border-4 border-rose-200 border-t-rose-600 rounded-full animate-spin"></div>
-                <p className="text-slate-600 font-medium text-center">正在遭遇事件...</p>
-                <p className="text-xs text-slate-400 text-center">如果加载时间过长，将自动关闭</p>
+                <p className="text-slate-600 font-medium text-center">正在遭遇事件，请稍候…</p>
+                <p className="text-xs text-slate-400 text-center">若长时间无响应，可重试。</p>
+              </div>
+            </div>
+          ) : eventError ? (
+            // Error state (allow retry/close)
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">
+              <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-rose-50">
+                <h2 className="text-lg font-bold text-rose-900 flex items-center gap-2">
+                  <AlertTriangle className="text-rose-600" size={20} /> 
+                  随机事件 - 错误
+                </h2>
+                <button onClick={() => { setShowEvent(false); setEventError(null); }} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
+              </div>
+              <div className="p-6 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-rose-50 to-pink-50 min-h-[220px]">
+                <p className="text-slate-700 text-center">{eventError}</p>
+                <div className="flex gap-3">
+                  <button onClick={() => { setEventError(null); triggerRandomEvent(); }} className="px-4 py-2 rounded bg-rose-600 text-white">重试</button>
+                  <button onClick={() => { setShowEvent(false); setEventError(null); }} className="px-4 py-2 rounded bg-white border">关闭</button>
+                </div>
               </div>
             </div>
           ) : (
