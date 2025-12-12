@@ -532,7 +532,7 @@ const App: React.FC = () => {
         text: `【随机事件】${currentEvent.title}\n\n${choice.outcome}`,
         type: 'event',
         turn: prev.week * 100 + prev.day * 10,
-        feedback: { stats: '', time: `W${prev.week} D${prev.day}` }
+        feedback: { stats: '', time: `第${prev.week}周 第${prev.day}天` }
       };
       (eventLog as any).rawChanges = choice.statChanges;
       (eventLog as any).rawRelUpdates = choice.relationshipChanges || [];
