@@ -337,6 +337,10 @@ const App: React.FC = () => {
                     if (newAffinity > 20 && r.status === 'Stranger') newStatus = 'Acquaintance';
                     if (newAffinity > 50 && r.status === 'Acquaintance') newStatus = 'Friend';
                     if (newAffinity > 80 && r.status === 'Friend') newStatus = 'Close Friend';
+                    // 如果是恋爱角色，且好感度超过90，升级为恋人
+                    if (['西海', 'Micha', '东海'].includes(r.name) && newAffinity > 90 && r.status !== 'Lover') {
+                        newStatus = 'Lover';
+                    }
                     return { ...r, affinity: newAffinity, status: newStatus };
                 }
                 return r;
